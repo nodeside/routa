@@ -1,0 +1,18 @@
+
+{
+"name": "routa",
+"version": "0.0.1",
+"description": "Easily create generalized routes",
+"main": "routa.js",
+"keywords": [
+"router"
+],
+"repository" : {
+"type" : "git",
+"url" : "https://github.com/nodeside/routa.git"
+},
+"dependencies": {
+"express": "3.0.0rc4",
+"qs": "0.4.2"
+}
+}
