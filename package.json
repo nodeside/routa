@@ -1,7 +1,7 @@
 
 {
 "name": "routa",
-"version": "0.0.2",
+"version": "0.0.3",
 "description": "Easily create generalized routes",
 "main": "routa.js",
 "keywords": [
