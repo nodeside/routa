@@ -1,31 +1,72 @@
 var config = require('./config');
-var dbConnection = null;
 var root = config.root;
-
-var setDBConnection = exports.setDBConnection = function (dbConnection) {
-  this.dbConnection = dbConnection;
-}
 
 exports.createRoute = function (app, options) {
   var route = options.route;
-  var RouteFunc = options.func;
-  var RouteData = options.data;
-  var RouteStructure = _buildRouteStructure(options);  
-
+  
   app.get(options.route, function(req, res, next) {    
-    var params = require('querystring').parse(req.params[RouteData]);                         
+    processRequest(req,res,next,options);
+  });
 
-    var args = new Array(req, res, next, {    
-      db:dbConnection
-    });
+  app.post(options.route, function(req, res, next) {    
+    processRequest(req,res,next, options);
+  });
+}
 
-    _routa({
-      route:root+_buildRoutePath(req.params, RouteStructure),
-      func:req.params[RouteFunc],
-      args:args,
-      next:next
-      });     
-    });
+function processRequest(req,res,next, options) {
+  var RouteFunc = options.func;
+  var RouteStructure = _buildRouteStructure(options);
+
+  var query = req.query;                         
+  var args = new Array(req, res, next, {    
+    db:(options.db)?(options.db):null,
+    kue:(options.kue)?(options.kue):null,
+    query:query,
+    vars:(options.vars)?(options.vars):null,
+    send: function(data) {
+      if (query.format == 'xml') {
+        res.header('Content-Type', 'text/xml');
+        res.header('Charset', 'utf-8');
+        res.send(JSON2XMLParser(data,'data'));        
+      } else  {
+        res.json(data);
+      }
+    }
+  });
+  _routa({
+    route:root+_buildRoutePath(req.params, RouteStructure),
+    func:req.params[RouteFunc],
+    args:args,
+    next:next
+  }); 
+}
+
+function JSON2XMLParser(json, wrapper) {
+  var out = "";
+  if (wrapper) {
+    out += '<'+wrapper+'>';
+  }
+  for (var key in json) {
+    if (json[key].constructor == Array) {
+      for (var i in json[key]) {
+        out += '<'+key+'>';
+        out += JSON2XMLParser(json[key][i]);
+        out += '</'+key+'>';
+      }
+    } else if (json[key].constructor == Object) {
+      out += JSON2XMLParser(json[key]);
+    } else {
+      out += '<'+key+'>';
+      out+=json[key];
+      out += '</'+key+'>';
+    } 
+  }
+  if (wrapper) {
+    out += '</'+wrapper+'>';
+  }
+
+  console.log(out);
+  return out;
 }
 
 function _buildRouteStructure(options) {

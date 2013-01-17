@@ -1,18 +1,22 @@
-
 {
-"name": "routa",
-"version": "0.0.3",
-"description": "Easily create generalized routes",
-"main": "routa.js",
-"keywords": [
-"router"
-],
-"repository" : {
-"type" : "git",
-"url" : "https://github.com/nodeside/routa.git"
-},
-"dependencies": {
-"express": "3.0.0rc4",
-"qs": "0.4.2"
-}
+  "name": "routa",
+  "version": "0.0.8",
+  "description": "Easily create generalized routes",
+  "main": "routa.js",
+  "keywords": [
+    "router"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodeside/routa.git"
+  },
+  "dependencies": {
+    "express": "3.0.0rc4"
+  },
+  "readme": "routa\n=====\n\nFirst Experimental version. Stay tuned for examples and many many fixes and improvements",
+  "_id": "routa@0.0.5",
+  "_from": "routa",
+  "dist": {
+    "shasum": "d1cca0997b01952911742c2307ecb372a91bfe91"
+  }
 }
